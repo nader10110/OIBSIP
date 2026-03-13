@@ -2,7 +2,8 @@ import pandas as pd
 import seaborn as sns
 import matplotlib.pyplot as plt
 
-df = pd.read_csv("AB_NYC_2019.csv")
+df = pd.read_csv(
+    r"D:\DATA_ANALYSIS\intership\OIBSIP\02-NYC-Airbnb-Cleaning\AB_NYC_2019.csv")
 
 print(df.head())
 print(df.info())
@@ -60,12 +61,12 @@ df = df[(df["minimum_nights"] >= Q1_nights - 1.5*IQR_nights) &
 
 plt.figure(figsize=(10, 5))
 sns.boxplot(x=df["price"])
-plt.title("Boxplot of price")
+plt.title("Boxplot of price (Remove Outliers)")
 plt.show()
 
 plt.figure(figsize=(10, 5))
 sns.boxplot(x=df["minimum_nights"])
-plt.title("Boxplot of Minimum Nights")
+plt.title("Boxplot of Minimum Nights (Remove Outliers)")
 plt.show()
 
 print("Memory usage before optimization:")
@@ -77,19 +78,5 @@ df["room_type"] = df["room_type"].astype("category")
 
 print("\n Memory usage after optimization:")
 print(df.memory_usage(deep=True).sum())
-
-df["last_review"] = pd.to_datetime(df["last_review"], errors="coerce")
-
-df["review_year"] = df["last_review"].dt.year
-df["review_month"] = df["last_review"].dt.month
-df["review_day"] = df["last_review"].dt.day
-
-print(df[["last_review", "review_year", "review_month", "review_day"]].head())
-
-df["review_year"] = df["review_year"].astype("Int64")
-df["review_month"] = df["review_month"].astype("Int64")
-df["review_day"] = df["review_day"].astype("Int64")
-
-print(df.dtypes)
 
 df.to_csv("AB_NYC_2019_Cleaned.csv", index=False)
